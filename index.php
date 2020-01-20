@@ -1,11 +1,24 @@
 <?php
-// Load in the database connection and helper function
-// ini_set('display_errors', 1);
-require_once 'config/database.php';
-require_once 'admin/scripts/read.php';
+require_once 'load.php';
 
-$movie_table = 'tbl_movies';
-$getMovies = getAll($movie_table);
+if(isset($_GET['filter'])){
+    // Filter movies by genre here
+    $args = array(
+        'tbl'=>'tbl_movies',
+        'tbl2'=>'tbl_genre',
+        'tbl3'=>'tbl_mov_genre',
+        'col'=>'movies_id',
+        'col2'=>'genre_id',
+        'col3'=>'genre_name',
+        'filter'=>$_GET['filter']
+    );
+
+    $getMovies = getMoviesByFilter($args);
+
+}else{
+    $movie_table = 'tbl_movies';
+    $getMovies = getAll($movie_table);
+}
 
 // var_dump($getMovies);exit;
 ?>
@@ -18,16 +31,20 @@ $getMovies = getAll($movie_table);
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Welcome to the Movie CMS</title>
 </head>
+
 <body>
-
-<?php while($row = $getMovies->fetch(PDO::FETCH_ASSOC)):?>
-    <div class="movie-item">
-        <img src="images/<?php echo $row['movies_cover']; ?>" alt="<?php echo $row['movies_title'];?>"/>
-        <h2><?php echo $row['movies_title'];?></h2>
-        <h4>Movie Released: <?php echo $row['movies_year'];?></h4>
-    </div>
-<?php endwhile;?>
-
+    <?php include 'templates/header.php';?>
+    <?php while($row = $getMovies->fetch(PDO::FETCH_ASSOC)):?>
     
+    <!-- Read more link with all movies and info -->
+        <div class="movie-item">
+            <img src="images/<?php echo $row['movies_cover']; ?>" alt="<?php echo $row['movies_title'];?>"/>
+            <h2><?php echo $row['movies_title'];?></h2>
+            <h4>Movie Released: <?php echo $row['movies_year'];?></h4>
+            <a href="details.php?id=<?php echo $row['movies_id'];?>">Read more...</a>
+        </div>
+    <?php endwhile;?>
+
+    <?php include 'templates/footer.php';?>
 </body>
 </html>
