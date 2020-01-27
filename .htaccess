@@ -1,0 +1,12 @@
+## This is how to set up a Redirect
+## when you type in http://localhost:8888/movies_cms/load.php, that will redirect you to the home page which is http://localhost:8888/movies_cms/
+
+Redirect 301 /movies_cms/load.php /movies_cms
+Redirect 301 /load.php /
+
+## This is how to set up a Deny Access
+## type in http://localhost:8888/movies_cms/.htaccess in the url to see how it works
+
+<FilesMatch "\.?htaccess$">
+    deny from all
+</FilesMatch>
