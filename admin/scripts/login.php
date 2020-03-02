@@ -35,6 +35,8 @@ function login($username, $password, $ip){
             // Logged in!
             // If there is a match from the database, you will be able to login (use this syntax as we don't want people using sql injection)
             $message = 'You just logged in!';
+            $_SESSION['user_id'] = $id;
+            $_SESSION['user_name'] = $found_user['user_fname'];
 
             // TO DO: Finish the folloiwng lines so that when user logged in the user_ip column gets updated by the $ip
             $update_query ='UPDATE tbl_user SET user_ip = :ip WHERE user_id = :id';
@@ -60,4 +62,15 @@ function login($username, $password, $ip){
 
     // Log user in
     return $message;
+}
+
+function confirm_logged_in(){
+    if(!isset($_SESSION['user_id'])){
+        redirect_to('admin_login.php');
+    }
+}
+
+function logout(){
+    session_destroy();
+    redirect_to('admin_login.php');
 }
