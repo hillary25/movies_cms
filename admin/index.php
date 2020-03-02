@@ -16,6 +16,7 @@
     <!-- Sessions are only good for something temporarily, or else it will save to the DB and you don't want to do that -->
 
     <a href="admin_createuser.php">Create User</a>
+    <a href="admin_edituser.php">Edit User</a>
     <a href="admin_logout.php">Sign Out</a>
     
 </body>
