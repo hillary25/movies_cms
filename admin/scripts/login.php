@@ -52,12 +52,14 @@ function login($username, $password, $ip){
 
         if(isset($id)){
             redirect_to('index.php');
+        }else{
+            $message = 'Wrong pasword!';
         }
 
         // Log user in
     }else{
         // User does not exist
-        $message = 'User does not exist';
+        $message = 'User does not exist!';
     }
 
     // Log user in
