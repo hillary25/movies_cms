@@ -24,7 +24,7 @@ function createUser($fname, $username, $password, $email){
     }
 }
 
-function getSingleUser($id) {
+function getSingleUser($id){
     $pdo = Database::getInstance()->getConnection();
 
     // TO DO: execute the proper SQL query to fetch the user data whose user_id = $id
@@ -52,16 +52,16 @@ function editUser($id, $fname, $username, $password, $email){
 
     // TO DO: run the proper SQL query to update tbl_user with proper values
     $update_user_query ='UPDATE tbl_user SET user_fname = :fname, user_name = :username, user_pass = :password, user_email = :email WHERE user_id = :id';
-            $update_user_set = $pdo->prepare($update_user_query);
-            $update_user_result = $update_user_set->execute(
-                array(
-                    ':fname'=>$fname,
-                    ':username'=>$username,
-                    ':password'=>$password,
-                    ':email'=>$email,
-                    ':id'=>$id
-                )
-            );
+    $update_user_set = $pdo->prepare($update_user_query);
+    $update_user_result = $update_user_set->execute(
+        array(
+            ':fname'=>$fname,
+            ':username'=>$username,
+            ':password'=>$password,
+            ':email'=>$email,
+            ':id'=>$id
+        )
+    );
 
     // How to debug
     //echo $update_user_set->debugDumpParams();
@@ -73,5 +73,40 @@ function editUser($id, $fname, $username, $password, $email){
         redirect_to('index.php');
     }else{
         return 'There was a problem updating the user';
+    }
+}
+
+function getAllUsers(){
+    $pdo = Database::getInstance()->getConnection();
+
+    $get_user_query ='SELECT * FROM tbl_user';
+    $users = $pdo->query($get_user_query);
+
+    if($users){
+        return $users;
+    }else{
+        return false;
+    }
+}
+
+function deleteUser($id){
+    // TO DO: finish the function to delete the given user
+    $pdo = Database::getInstance()->getConnection();
+
+    $delete_user_query = 'DELETE FROM tbl_user WHERE user_id= :id';
+    $delete_user_set = $pdo->prepare($delete_user_query);
+    $delete_user_result = $delete_user_set->execute(
+        array(
+            ':id'=>$id
+        )
+    );
+
+    // If everythung went through, redirect to admin_deleteuser.php
+    // Otherwise, return false
+    // row count means that the admin cannot be deleted (the rows need to stay more than 0)
+    if($delete_user_result && $delete_user_set->rowCount() > 0){
+        redirect_to('admin_deleteuser.php');
+    }else{
+        return false;
     }
 }
